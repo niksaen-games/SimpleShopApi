@@ -1,0 +1,21 @@
+# PostgreSQL
+PostgreSQL__Database=
+PostgreSQL__User=
+PostgreSQL__Password=
+PostgreSQL__Port=
+
+# MinIO
+MinIO__User=
+MinIO__Password=
+
+# Mail
+Mail__Host=
+Mail__Port=
+Mail__User=
+Mail__AppPassword=
+
+# JWT
+Jwt__Audience=
+Jwt__Issuer=
+Jwt__ExpiriesInMinutes=
+Jwt__SecretKey=
