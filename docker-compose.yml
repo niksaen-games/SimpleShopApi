@@ -1,0 +1,78 @@
+name: simple-shop-api
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${PostgreSQL__Database}
+      - POSTGRES_USER=${PostgreSQL__User}
+      - POSTGRES_PASSWORD=${PostgreSQL__Password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  adminer:
+    image: adminer:4.8.1
+    container_name: adminer
+    env_file:
+      - .env
+    ports:
+      - "5433:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+      - ADMINER_DEFAULT_DB_NAME=${PostgreSQL__Database}
+      - ADMINER_DEFAULT_USERNAME=${PostgreSQL__User}
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:RELEASE.2023-10-07T15-07-38Z
+    container_name: minio
+    env_file:
+      - .env
+    environment:
+      - MINIO_ROOT_USER=${MinIO__User}
+      - MINIO_ROOT_PASSWORD=${MinIO__Password}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api
+    env_file:
+      - .env
+    ports:
+      - "8080:8080" 
+    depends_on:
+      - postgres
+      - minio
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  minio_data:
+
+networks:
+  app-network:
+    driver: bridge
