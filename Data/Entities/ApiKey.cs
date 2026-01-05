@@ -13,8 +13,8 @@ namespace SimpleShopApi.Data.Entities
     public class ApiKey
     {
         public Guid Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime ExpiriesAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime ExpiriesAt { get; set; } = DateTime.UtcNow.AddYears(1);
         public ApiPermissions Permissions { get; set; }
         public bool IsActive { get; set; } = true;
     }

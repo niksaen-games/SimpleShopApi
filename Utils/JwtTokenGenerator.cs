@@ -24,13 +24,16 @@ namespace SimpleShopApi.Utils
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public string? GetUserIdFromToken(string token)
+        public Guid? GetUserIdFromToken(string token)
         {
+            token = token.Replace("Bearer ", "");
             var handler = new JwtSecurityTokenHandler();
             try
             {
                 var principal = handler.ValidateToken(token, parameters, out _);
-                return principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var str = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (str == null) return null;
+                return Guid.Parse(str);
             }
             catch
             {

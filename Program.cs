@@ -3,7 +3,9 @@ using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SimpleShopApi.BLL;
 using SimpleShopApi.Data;
+using SimpleShopApi.Data.Repositories;
 using SimpleShopApi.Services;
 using SimpleShopApi.Utils;
 using System;
@@ -75,6 +77,17 @@ builder.Services
 //Services
 builder.Services.AddSingleton<FileService>();
 builder.Services.AddSingleton<MailService>();
+
+//Repositories
+builder.Services.AddScoped<ApiKeyRepository>();
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<ConfirmCodeRepository>();
+
+//BLL
+builder.Services.AddScoped<UserService>();
+
+//Utils
+builder.Services.AddScoped<ApiKeyValidator>();
 
 var app = builder.Build();
 
